@@ -23,17 +23,24 @@ jobs:
      - name: Run tests
        run: pytest
 
- docker-build:
-   needs: test
-   runs-on: ubuntu-latest
+ docker-build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-   steps:
-     - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-     - name: Build Docker image
-       run: docker build -t calculator-app .
-
- docker-push:
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/calculator-app:latest
    needs: docker-build
    runs-on: ubuntu-latest
    steps:
