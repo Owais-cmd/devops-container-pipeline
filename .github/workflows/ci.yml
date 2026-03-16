@@ -43,13 +43,13 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/calculator-app:latest
  
  artifact-upload:
-    needs: docker-build-and-push
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: calculator-app-test-results
           path: build-package.zip
