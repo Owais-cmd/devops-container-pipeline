@@ -41,5 +41,17 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/calculator-app:latest
+ 
+ artifact-upload:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: calculator-app-test-results
+          path: build-package.zip
    
 
